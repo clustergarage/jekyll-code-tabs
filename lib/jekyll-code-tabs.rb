@@ -1,8 +1,47 @@
 require_relative "jekyll-code-tabs/version"
-require_relative "jekyll-code-tabs/generator"
-require_relative "jekyll-code-tabs/code_tabs_tag"
 
 module Jekyll
   module CodeTabs
+    class CodeTabsBlock < Liquid::Block
+      def render(context)
+        environment = context.environments.first
+        environment['codetabs'] = {} # reset each time
+        super
+
+        output = "<ul uk-tab>"
+        environment['codetabs'].each_with_index do |(key, _), index|
+          output += "<li#{index == 0 ? " class=\"uk-active\"" : ""}><a href=\"#\">#{key}</a></li>"
+        end
+        output += "</ul><ul class=\"uk-switcher uk-margin\">"
+        environment['codetabs'].each do |_, value|
+          output += "<li>#{value}</li>"
+        end
+        output += "</ul>"
+        output
+      end
+    end
+
+    class CodeTabBlock < Liquid::Block
+      alias_method :render_block, :render
+
+      def initialize(tag_name, markup, tokens)
+        super
+        if markup == ""
+          raise SyntaxError.new("No toggle name given in #{tag_name} tag")
+        end
+        @toggle = markup.strip
+      end
+
+      def render(context)
+        site = context.registers[:site]
+        converter = site.find_converter_instance(::Jekyll::Converters::Markdown)
+        environment = context.environments.first
+        environment['codetabs'] ||= {}
+        environment['codetabs'][@toggle] = converter.convert(render_block(context))
+      end
+    end
   end
 end
+
+Liquid::Template.register_tag("codetab", Jekyll::CodeTabs::CodeTabBlock)
+Liquid::Template.register_tag("codetabs", Jekyll::CodeTabs::CodeTabsBlock)

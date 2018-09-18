@@ -5,7 +5,7 @@ Gem::Specification.new do |spec|
   spec.name          = "jekyll-code-tabs"
   spec.summary       = "Fenced code tabs for Jekyll"
   spec.description   = "Separate language snippets with fenced code tabs for documentation pages"
-  spec.version       = JekyllCodeTabs::VERSION
+  spec.version       = Jekyll::CodeTabs::VERSION
   spec.authors       = ["Brett Fowle"]
   spec.email         = ["brettfowle@gmail.com"]
   spec.homepage      = "https://github.com/clustergarage/jekyll-code-tabs"
