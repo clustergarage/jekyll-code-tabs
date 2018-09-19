@@ -1,3 +1,4 @@
+require "erb"
 require_relative "jekyll-code-tabs/version"
 
 module Jekyll
@@ -8,16 +9,20 @@ module Jekyll
         environment['codetabs'] = {} # reset each time
         super
 
-        output = "<ul uk-tab>"
-        environment['codetabs'].each_with_index do |(key, _), index|
-          output += "<li#{index == 0 ? " class=\"uk-active\"" : ""}><a href=\"#\">#{key}</a></li>"
-        end
-        output += "</ul><ul class=\"uk-switcher uk-margin\">"
-        environment['codetabs'].each do |_, value|
-          output += "<li>#{value}</li>"
-        end
-        output += "</ul>"
-        output
+				template = ERB.new <<-EOF
+<ul uk-tab>
+<% environment['codetabs'].each_with_index do |(key, _), index| %>
+	<li<%= index == 0 ? ' class="uk-active"' : ''%>><a href="#"><%= key %></a></li>
+<% end %>
+</ul>
+
+<ul class="uk-switcher uk-margin">
+<% environment['codetabs'].each do |_, value| %>
+	<li><%= value %></li>
+<% end %>
+</ul>
+EOF
+				template.result(binding)
       end
     end
 
