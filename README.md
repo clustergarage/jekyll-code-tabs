@@ -4,19 +4,29 @@
 
 ## Usage
 
-```
+````
 {% codetabs %}
 
-{% codetab Foo %}
-Lorem ipsum dolor sit amet
+{% codetab C %}
+```c
+printf("Hello, world!");
+```
 {% endcodetab %}
 
-{% codetab Bar %}
-Consectetur adipiscing elit
+{% codetab Go %}
+```go
+fmt.Println("Hello, world!")
+```
+{% endcodetab %}
+
+{% codetab Python %}
+```python
+print("Hello, world!")
+```
 {% endcodetab %}
 
 {% endcodetabs %}
-```
+````
 
 This will create a tabbed-view (hardcoded to UIkit classes for now) that will
 allow the user to toggle between content.
