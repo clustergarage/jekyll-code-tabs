@@ -10,13 +10,13 @@ module Jekyll
         super
 
 				template = ERB.new <<-EOF
-<ul uk-tab>
+<ul class="uk-tab" data-uk-switcher="{connect:'#tab-content'}">
 <% environment['codetabs'].each_with_index do |(key, _), index| %>
 	<li<%= index == 0 ? ' class="uk-active"' : ''%>><a href="#"><%= key %></a></li>
 <% end %>
 </ul>
 
-<ul class="uk-switcher uk-margin">
+<ul id="tab-content" class="uk-switcher uk-margin">
 <% environment['codetabs'].each do |_, value| %>
 	<li><%= value %></li>
 <% end %>
