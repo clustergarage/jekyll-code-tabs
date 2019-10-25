@@ -1,4 +1,5 @@
 require "erb"
+require 'securerandom'
 require_relative "jekyll-code-tabs/version"
 
 module Jekyll
@@ -9,14 +10,15 @@ module Jekyll
         environment['codetabs'] = {} # reset each time
         super
 
+        uuid = SecureRandom.uuid
 				template = ERB.new <<-EOF
-<ul class="uk-tab" data-uk-switcher="{connect:'#tab-content'}">
+<ul class="uk-tab" data-uk-switcher="{connect:'#<%= uuid %>'}">
 <% environment['codetabs'].each_with_index do |(key, _), index| %>
 	<li<%= index == 0 ? ' class="uk-active"' : ''%>><a href="#"><%= key %></a></li>
 <% end %>
 </ul>
 
-<ul id="tab-content" class="uk-switcher uk-margin">
+<ul id="<%= uuid %>" class="uk-switcher uk-margin">
 <% environment['codetabs'].each do |_, value| %>
 	<li><%= value %></li>
 <% end %>
